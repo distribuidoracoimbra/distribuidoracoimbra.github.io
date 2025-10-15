@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pagamento via Pix</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 350px;
+    }
+    .logo {
+      margin-bottom: 20px;
+    }
+    .logo img {
+      max-width: 200px;
+    }
+    #qrcode {
+      margin: 20px 0;
+    }
+    .link-container {
+      display: flex;
+      margin-top: 10px;
+    }
+    .link-container input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px 0 0 6px;
+      font-size: 14px;
+    }
+    .link-container button {
+      padding: 8px 12px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 0 6px 6px 0;
+      cursor: pointer;
+    }
+    .link-container button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="assets/logo.png" alt="Logo Empresa">
+    </div>
+
+    <h2>Pagamento via Pix</h2>
+    <div id="qrcode"></div>
+
+    <div class="link-container">
+      <input type="text" id="pixLink" readonly>
+      <button onclick="copiarLink()">Copiar</button>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const link = urlParams.get('pix');
+
+    if (link) {
+      document.getElementById("pixLink").value = link;
+
+      QRCode.toCanvas(document.createElement("canvas"), link, { width: 250 }, (err, canvas) => {
+        if (!err) {
+          document.getElementById("qrcode").appendChild(canvas);
+        }
+      });
+    } else {
+      document.getElementById("qrcode").innerHTML = "<p style='color:red'>Nenhum link informado.</p>";
+    }
+
+    function copiarLink() {
+      const input = document.getElementById("pixLink");
+      input.select();
+      input.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(input.value).then(() => {
+        alert("Link copiado!");
+      });
+    }
+  </script>
+</body>
+</html>
