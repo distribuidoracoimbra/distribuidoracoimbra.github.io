@@ -17,6 +17,7 @@
             --color-background: #f4f7fa;
             --color-border: #cccccc;
             --color-text: #343a40;
+            --color-text-secondary: #6c757d;
         }
 
         body {
@@ -28,7 +29,9 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 1rem;
+            padding: 1.5rem 1rem;
+            box-sizing: border-box;
+            overflow-x: hidden;
         }
 
         .card-container {
@@ -36,14 +39,14 @@
             max-width: 420px;
             background-color: white;
             padding: 2rem 1.25rem;
-            border-radius: 1rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 1.25rem;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
             border: 1px solid #e9ecef;
             text-align: center;
         }
 
         .logo-container {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.75rem;
             display: flex;
             justify-content: center;
         }
@@ -55,28 +58,29 @@
         }
 
         h2 {
-            font-size: 1.85rem;
+            font-size: 2rem;
             font-weight: 800;
             color: var(--color-primary-dark);
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
         }
 
         .subtitle {
-            color: var(--color-text);
-            font-size: 0.95rem;
-            font-weight: 400;
-            margin-bottom: 1.75rem;
+            color: var(--color-text-secondary);
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            line-height: 1.4;
         }
 
         #qrcode-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0.75rem;
-            border-radius: 0.75rem;
+            padding: 1rem;
+            border-radius: 1rem;
             background: #fff;
             border: 3px solid #dee2e6;
-            margin-bottom: 2rem;
+            margin-bottom: 2.25rem;
         }
 
         #qrcode {
@@ -91,6 +95,7 @@
             max-width: 100%;
             height: auto;
             border-radius: 0.25rem;
+            display: block;
         }
 
         #placeholder-message {
@@ -98,10 +103,11 @@
             font-weight: 500;
             padding: 1rem;
             text-align: center;
+            font-size: 0.95rem;
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         .input-group {
@@ -120,10 +126,11 @@
 
         .input-flex-wrapper {
             display: flex;
-            border-radius: 0.5rem;
+            border-radius: 0.6rem;
             overflow: hidden;
             border: 1px solid var(--color-border);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+            min-height: 48px;
         }
 
         #pixLink {
@@ -137,6 +144,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            min-width: 0;
         }
 
         #copyButton {
@@ -149,6 +157,7 @@
             transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
             font-size: 0.9rem;
             text-transform: uppercase;
+            flex-shrink: 0;
         }
 
         #copyButton:hover {
@@ -164,14 +173,14 @@
             top: 1.5rem;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 50;
+            z-index: 1000;
             padding: 0.85rem 1.5rem;
             border-radius: 0.5rem;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             font-weight: 600;
-            opacity: 0;
-            pointer-events: none;
             transition: opacity 0.3s ease-in-out;
+            max-width: 90%;
+            text-align: center;
         }
 
         .bg-success {
@@ -203,16 +212,16 @@
     <div id="payment-card" class="card-container">
 
         <div class="logo-container">
-            <img src="assets/logo.png alt="Logo Empresa" class="logo-img">
+            <img src="assets/logo.webp" alt="Logo Empresa" class="logo-img">
         </div>
 
         <h2>PAGUE COM PIX</h2>
-        <p class="subtitle">Escaneie o QR Code ou use a opção **Pix Copia e Cola** abaixo.</p>
+        <p class="subtitle">Escaneie o QR Code ou use a opção <b>Pix Copia e Cola</b> abaixo.</p>
 
         <div id="qrcode-container">
             <div id="qrcode">
                 <div id="placeholder-message" class="hidden">
-                    Nenhum código Pix válido encontrado.
+                    Nenhum Pix válido encontrado.
                 </div>
             </div>
         </div>
@@ -220,7 +229,7 @@
         <div class="input-group">
             <label for="pixLink">PIX COPIA E COLA</label>
             <div class="input-flex-wrapper">
-                <input type="text" id="pixLink" readonly value="" placeholder="Link ou código Pix aqui...">
+                <input type="text" id="pixLink" readonly value="" placeholder="Link ou Pix aqui...">
                 <button onclick="copiarLink()" id="copyButton">
                     Copiar
                 </button>
@@ -228,8 +237,8 @@
         </div>
     </div>
 
-    <div id="toast-notification" class="bg-success">
-        Código Pix copiado com sucesso!
+    <div id="toast-notification" class="bg-success opacity-0 pointer-events-none">
+        Pix copiado com sucesso!
     </div>
 
     <script>
@@ -242,7 +251,6 @@
 
         function showToast(message, type = 'success') {
             toast.textContent = message;
-
             toast.classList.remove('bg-success', 'bg-error');
             if (type === 'success') {
                 toast.classList.add('bg-success');
@@ -250,7 +258,8 @@
                 toast.classList.add('bg-error');
             }
 
-            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.remove('opacity-0');
+            toast.classList.remove('pointer-events-none');
             toast.classList.add('opacity-100');
 
             setTimeout(() => {
@@ -262,12 +271,11 @@
         if (link && link.length > 5) {
             pixLinkInput.value = link;
 
-            QRCode.toCanvas(document.createElement("canvas"), link, { width: 250 }, (err, canvas) => {
+            QRCode.toCanvas(document.createElement("canvas"), link, { width: 250, margin: 2 }, (err, canvas) => {
                 if (!err) {
                     qrcodeDiv.innerHTML = '';
                     qrcodeDiv.appendChild(canvas);
                 } else {
-                    console.error("Erro ao gerar QR Code:", err);
                     qrcodeDiv.innerHTML = '';
                     placeholderMessage.textContent = "Erro ao gerar QR Code. Tente copiar o código abaixo.";
                     placeholderMessage.classList.remove('hidden');
@@ -281,23 +289,36 @@
         function copiarLink() {
             const input = document.getElementById("pixLink");
 
-            try {
-                input.select();
-                input.setSelectionRange(0, 99999);
-                document.execCommand('copy');
-                showToast("Código Pix copiado com sucesso!", 'success');
-            } catch (err) {
-                console.error('Falha ao copiar (execCommand):', err);
+            if (input.value === "Link Pix não fornecido na URL." || input.value === "") {
+                showToast("Nenhum Pix para copiar!", 'error');
+                return;
+            }
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(input.value).then(() => {
-                    showToast("Código Pix copiado com sucesso!", 'success');
+                    showToast("Pix copiado com sucesso!", 'success');
                 }).catch(e => {
-                    showToast("Erro ao copiar! Tente selecionar e copiar manualmente.", 'error');
-                    console.error('Falha na API Clipboard:', e);
+                    try {
+                        input.select();
+                        input.setSelectionRange(0, 99999);
+                        document.execCommand('copy');
+                        showToast("Pix copiado com sucesso!", 'success');
+                    } catch (err) {
+                        showToast("Erro ao copiar! Tente selecionar e copiar manualmente.", 'error');
+                    }
                 });
+            } else {
+                try {
+                    input.select();
+                    input.setSelectionRange(0, 99999);
+                    document.execCommand('copy');
+                    showToast("Pix copiado com sucesso!", 'success');
+                } catch (err) {
+                    showToast("Erro ao copiar! Tente selecionar e copiar manualmente.", 'error');
+                }
             }
         }
     </script>
 </body>
 
 </html>
-
