@@ -4,320 +4,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagamento Pix</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-
+    <title>Pagamento Pix - DISTRIBUIDORA COIMBRA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --color-primary: #007bff;
-            --color-primary-dark: #0056b3;
-            --color-success: #28a745;
-            --color-error: #dc3545;
-            --color-background: #f4f7fa;
-            --color-border: #cccccc;
-            --color-text: #343a40;
-            --color-text-secondary: #6c757d;
+            --azul-escuro: #003366;
+            --azul-medio: #007BFF;
+            --azul-claro-fundo: #E6F0FF;
+            --texto-claro: #FFFFFF;
+            --sucesso-verde: #28a745;
+            --cinza-texto: #6c757d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
-            font-family: 'Inter', Arial, sans-serif;
+            background-color: var(--azul-claro-fundo);
+            color: var(--azul-escuro);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            margin: 0;
-            background-color: var(--color-background);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 1.5rem 1rem;
-            box-sizing: border-box;
-            overflow-x: hidden;
+            padding: 20px;
         }
 
-        .card-container {
+        .pix-container {
+            background-color: var(--texto-claro);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 450px;
             width: 100%;
-            max-width: 420px;
-            background-color: white;
-            padding: 2rem 1.25rem;
-            border-radius: 1.25rem;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e9ecef;
             text-align: center;
+            margin-bottom: 20px;
         }
 
-        .logo-container {
-            margin-bottom: 1.75rem;
-            display: flex;
-            justify-content: center;
+        .logo {
+            margin-bottom: 5px;
         }
 
-        .logo-img {
-            max-width: 160px;
+        .logo img {
+            max-width: 150px;
             height: auto;
-            border-radius: 0.25rem;
         }
 
-        h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--color-primary-dark);
-            margin-bottom: 0.5rem;
+        .header h1 {
+            color: var(--azul-escuro);
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
 
-        .subtitle {
-            color: var(--color-text-secondary);
-            font-size: 1rem;
-            font-weight: 500;
-            margin-bottom: 2rem;
-            line-height: 1.4;
+        .header p {
+            color: var(--cinza-texto);
+            font-size: 0.8em;
+            margin-bottom: 10px;
         }
 
-        #qrcode-container {
+        .qr-code-block {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 1rem;
-            border-radius: 1rem;
-            background: #fff;
-            border: 3px solid #dee2e6;
-            margin-bottom: 2.25rem;
+            min-height: 180px;
         }
 
-        #qrcode {
-            width: 250px;
-            height: 250px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #qrcode canvas {
+        #qrcode img {
             max-width: 100%;
             height: auto;
-            border-radius: 0.25rem;
-            display: block;
+            border-radius: 5px;
         }
 
-        #placeholder-message {
-            color: var(--color-error);
-            font-weight: 500;
-            padding: 1rem;
-            text-align: center;
-            font-size: 0.95rem;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .input-group {
-            margin-top: 0;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--color-text);
-            text-align: left;
-            margin-bottom: 0.5rem;
-            padding: 0 0.25rem;
-        }
-
-        .input-flex-wrapper {
-            display: flex;
-            border-radius: 0.6rem;
-            overflow: hidden;
-            border: 1px solid var(--color-border);
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-            min-height: 48px;
-        }
-
-        #pixLink {
-            flex: 1;
-            padding: 0.8rem 1rem;
-            border: none;
+        .pix-code-block {
             background-color: #f8f9fa;
-            font-size: 0.95rem;
-            outline: none;
-            color: #495057;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            min-width: 0;
+            border: 1px dashed #ced4da;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
         }
 
-        #copyButton {
-            padding: 0.8rem 1.25rem;
-            background-color: var(--color-primary);
-            color: white;
-            font-weight: 700;
+        .pix-code-block p {
+            font-weight: 600;
+            color: var(--azul-escuro);
+            margin-bottom: 5px;
+        }
+
+        #pix-code-display {
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 0.9em;
+            color: var(--azul-escuro);
+            text-align: left;
+            max-height: 80px;
+            overflow: auto;
+            margin-bottom: 10px;
+            padding: 5px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+
+        .copy-button {
+            width: 100%;
+            background-color: var(--azul-medio);
+            color: var(--texto-claro);
+            padding: 12px 20px;
             border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            flex-shrink: 0;
+            transition: background-color 0.3s, transform 0.1s;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        #copyButton:hover {
-            background-color: var(--color-primary-dark);
+        .copy-button:hover {
+            background-color: var(--azul-escuro);
         }
 
-        #copyButton:active {
+        .copy-button:active {
             transform: scale(0.98);
         }
 
-        #toast-notification {
-            position: fixed;
-            top: 1.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            padding: 0.85rem 1.5rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            font-weight: 600;
-            transition: opacity 0.3s ease-in-out;
-            max-width: 90%;
-            text-align: center;
+        .copy-button .icon {
+            margin-right: 8px;
         }
 
-        .bg-success {
-            background-color: var(--color-success);
-            color: white;
-        }
-
-        .bg-error {
-            background-color: var(--color-error);
-            color: white;
-        }
-
-        .opacity-100 {
-            opacity: 1;
-        }
-
-        .opacity-0 {
-            opacity: 0;
-        }
-
-        .pointer-events-none {
-            pointer-events: none;
+        .icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
         }
     </style>
 </head>
 
 <body>
-
-    <div id="payment-card" class="card-container">
-
-        <div class="logo-container">
-            <img src="assets/logo.webp" alt="Logo Empresa" class="logo-img">
+    <div class="pix-container">
+        <div class="logo">
+            <img src="logo.webp" alt="DISTRIBUIDORA COIMBRA Logo">
         </div>
 
-        <h2>PAGUE COM PIX</h2>
-        <p class="subtitle">Escaneie o QR Code ou use a opção <b>Pix Copia e Cola</b> abaixo.</p>
+        <div class="header">
+            <h1>Pagamento por Pix</h1>
+            <p>Escaneie o QR Code ou utilize o código Copia e Cola no app do seu banco.</p>
+        </div>
 
-        <div id="qrcode-container">
+        <div class="qr-code-block">
             <div id="qrcode">
-                <div id="placeholder-message" class="hidden">
-                    Nenhum Pix válido encontrado.
-                </div>
+                <p>Gerando QR Code...</p>
             </div>
         </div>
 
-        <div class="input-group">
-            <label for="pixLink">PIX COPIA E COLA</label>
-            <div class="input-flex-wrapper">
-                <input type="text" id="pixLink" readonly value="" placeholder="Link ou Pix aqui...">
-                <button onclick="copiarLink()" id="copyButton">
-                    Copiar
-                </button>
-            </div>
+        <div class="pix-code-block">
+            <p>Copia e Cola</p>
+            <div id="pix-code-display">Aguardando código na URL...</div>
+
+            <button id="copy-pix-button" class="copy-button" disabled>
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                        d="M16 1H4C2.9 1 2 1.9 2 3v14h2V3h12V1zm3 4H8C6.9 5 6 5.9 6 7v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+                </svg>
+                <span>Copiar Código Pix</span>
+            </button>
         </div>
     </div>
 
-    <div id="toast-notification" class="bg-success opacity-0 pointer-events-none">
-        Pix copiado com sucesso!
-    </div>
-
+    <script src="qrcode.min.js"></script>
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const link = urlParams.get('pix');
-        const qrcodeDiv = document.getElementById("qrcode");
-        const pixLinkInput = document.getElementById("pixLink");
-        const placeholderMessage = document.getElementById("placeholder-message");
-        const toast = document.getElementById("toast-notification");
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pixCode = urlParams.get('pix');
+            const displayElement = document.getElementById('pix-code-display');
+            const copyButton = document.getElementById('copy-pix-button');
+            const qrcodeDiv = document.getElementById('qrcode');
 
-        function showToast(message, type = 'success') {
-            toast.textContent = message;
-            toast.classList.remove('bg-success', 'bg-error');
-            if (type === 'success') {
-                toast.classList.add('bg-success');
-            } else {
-                toast.classList.add('bg-error');
-            }
+            if (pixCode) {
+                const cleanPixCode = pixCode.trim();
 
-            toast.classList.remove('opacity-0');
-            toast.classList.remove('pointer-events-none');
-            toast.classList.add('opacity-100');
+                qrcodeDiv.innerHTML = '';
+                new QRCode(qrcodeDiv, {
+                    text: cleanPixCode,
+                    width: 180,
+                    height: 180,
+                    colorDark: "#003366",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.L
+                });
 
-            setTimeout(() => {
-                toast.classList.remove('opacity-100');
-                toast.classList.add('opacity-0', 'pointer-events-none');
-            }, 3000);
-        }
+                displayElement.textContent = cleanPixCode;
 
-        if (link && link.length > 5) {
-            pixLinkInput.value = link;
+                copyButton.removeAttribute('disabled');
 
-            QRCode.toCanvas(document.createElement("canvas"), link, { width: 250, margin: 2 }, (err, canvas) => {
-                if (!err) {
-                    qrcodeDiv.innerHTML = '';
-                    qrcodeDiv.appendChild(canvas);
-                } else {
-                    qrcodeDiv.innerHTML = '';
-                    placeholderMessage.textContent = "Erro ao gerar QR Code. Tente copiar o código abaixo.";
-                    placeholderMessage.classList.remove('hidden');
-                }
-            });
-        } else {
-            pixLinkInput.value = "Link Pix não fornecido na URL.";
-            placeholderMessage.classList.remove('hidden');
-        }
-
-        function copiarLink() {
-            const input = document.getElementById("pixLink");
-
-            if (input.value === "Link Pix não fornecido na URL." || input.value === "") {
-                showToast("Nenhum Pix para copiar!", 'error');
-                return;
-            }
-
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(input.value).then(() => {
-                    showToast("Pix copiado com sucesso!", 'success');
-                }).catch(e => {
+                copyButton.addEventListener('click', async () => {
                     try {
-                        input.select();
-                        input.setSelectionRange(0, 99999);
-                        document.execCommand('copy');
-                        showToast("Pix copiado com sucesso!", 'success');
+                        await navigator.clipboard.writeText(cleanPixCode);
+
+                        copyButton.innerHTML = `
+                             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                            <span>Copiado!</span>
+                        `;
+                        copyButton.style.backgroundColor = 'var(--sucesso-verde)';
+
+                        setTimeout(() => {
+                            copyButton.innerHTML = `
+                                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M16 1H4C2.9 1 2 1.9 2 3v14h2V3h12V1zm3 4H8C6.9 5 6 5.9 6 7v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                                </svg>
+                                <span>Copiar Código Pix</span>
+                            `;
+                            copyButton.style.backgroundColor = 'var(--azul-medio)';
+                        }, 3000);
+
                     } catch (err) {
-                        showToast("Erro ao copiar! Tente selecionar e copiar manualmente.", 'error');
+                        alert('Erro ao copiar. Tente selecionar o texto e copiar manualmente.');
+                        console.error('Erro ao copiar: ', err);
                     }
                 });
+
             } else {
-                try {
-                    input.select();
-                    input.setSelectionRange(0, 99999);
-                    document.execCommand('copy');
-                    showToast("Pix copiado com sucesso!", 'success');
-                } catch (err) {
-                    showToast("Erro ao copiar! Tente selecionar e copiar manualmente.", 'error');
-                }
+                displayElement.textContent = "Erro: Código Pix não encontrado na URL (parâmetro 'pix').";
+                qrcodeDiv.innerHTML = '<p style="color: var(--cinza-texto);">QR Code não disponível.</p>';
+                copyButton.style.backgroundColor = '#dc3545';
             }
-        }
+        });
     </script>
 </body>
 
